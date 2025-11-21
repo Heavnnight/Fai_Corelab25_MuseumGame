@@ -7,8 +7,10 @@ public class Raycast : MonoBehaviour
 {
     [Header("Raycast Features")]
     [SerializeField] private float rayLength = 5;
+
     [Header("Crosshair")]
     [SerializeField] private Image crosshair;
+
     [Header("Input Key")]
     [SerializeField] private KeyCode interactKey;
 
@@ -22,9 +24,16 @@ public class Raycast : MonoBehaviour
 
     private void Update()
     {
-        if (Physics.Raycast(_camera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0)), transform.forward, out RaycastHit hit, rayLength))
+       
+        if (Physics.Raycast(
+                _camera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0)),
+                transform.forward,
+                out RaycastHit hit,
+                rayLength))
         {
-            var readableItem = hit.collider.GetComponent<NoteController>();
+           
+            var readableItem = hit.collider.GetComponentInParent<NoteController>();
+
             if (readableItem != null)
             {
                 _noteController = readableItem;
