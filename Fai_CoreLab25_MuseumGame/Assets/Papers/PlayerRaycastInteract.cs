@@ -3,12 +3,15 @@ using UnityEngine.UI;
 
 public class PlayerRaycastInteract : MonoBehaviour
 {
-    public Camera cam;            
-    public float range = 3f;     
-    public Image crosshair;   
+    public Camera cam;
+    public float range = 15f;
+    public Image crosshair;
 
     Color normalColor = Color.white;
     Color interactColor = Color.red;
+
+    NoteController note;
+    RadioInteract radio;
 
     void Update()
     {
@@ -19,21 +22,32 @@ public class PlayerRaycastInteract : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, range))
         {
-            RadioInteract radio = hit.collider.GetComponent<RadioInteract>();
-
-            if (radio != null)
+            // 1) check note
+            note = hit.collider.GetComponentInParent<NoteController>();
+            if (note != null)
             {
                 crosshair.color = interactColor;
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    radio.ToggleOn();
+                    note.ShowNote();
                 }
+                return;
+            }
+
+            // 2) check radio
+            radio = hit.collider.GetComponent<RadioInteract>();
+            if (radio != null)
+            {
+                crosshair.color = interactColor;
+
+                if (Input.GetMouseButtonDown(0))
+                    radio.ToggleOn();
 
                 if (Input.GetMouseButtonDown(1))
-                {
                     radio.ToggleOff();
-                }
+
+                return;
             }
         }
     }
